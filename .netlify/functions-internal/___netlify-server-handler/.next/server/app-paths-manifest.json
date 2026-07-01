@@ -1,0 +1,6 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/page": "app/page.js",
+  "/api/ollama/[...path]/route": "app/api/ollama/[...path]/route.js",
+  "/api/dashscope/route": "app/api/dashscope/route.js"
+}

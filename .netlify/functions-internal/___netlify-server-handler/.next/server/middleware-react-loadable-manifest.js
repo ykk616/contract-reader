@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST='{"lib\\\\docx.ts -> mammoth/mammoth.browser":{"id":5481,"files":["static/chunks/38eea3d6.a50ef5cf2ed7f53a.js"]},"lib\\\\pdf.ts -> pdfjs-dist":{"id":7781,"files":["static/chunks/9b0008ae.df83885e00be0644.js","static/chunks/310.bb07116a3a9b67eb.js"]}}';

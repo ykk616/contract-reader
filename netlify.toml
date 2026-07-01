@@ -1,0 +1,10 @@
+[functions]
+  # 合同分析需要较长时间（OCR + AI 总结），30 秒
+  node_bundler = "esbuild"
+  external_node_modules = ["pdfjs-dist", "tesseract.js", "mammoth"]
+
+[functions."*"]
+  # Next.js API 路由的函数超时（秒）
+  # 默认 10 秒太短，合同分析流式响应通常 10-25 秒
+  # 30 秒给足了 AI + OCR 的组合时间
+  timeout = 30
