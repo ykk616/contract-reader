@@ -107,6 +107,97 @@ html, body {
 
 /* 打印 */
 @media print {
-  body { background: white; }
-  header, footer, button, .no-print { display: none !important; }
+  @page {
+    margin: 2cm 1.5cm;
+    size: A4;
+  }
+
+  html, body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+    line-height: 1.6;
+  }
+
+  header, footer, button, .no-print,
+  [class*="sticky"], #toc-sidebar,
+  .typing-dot, .skeleton, .upload-breathe {
+    display: none !important;
+  }
+
+  .max-w-4xl {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  [class*="rounded-xl"] {
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* 风险徽章灰阶化 */
+  .bg-red-100 { background: #f0f0f0 !important; color: black !important; border: 1px solid black !important; }
+  .bg-yellow-100 { background: #f0f0f0 !important; color: black !important; border: 1px solid #666 !important; }
+  .bg-green-100 { background: #f0f0f0 !important; color: black !important; border: 1px solid #999 !important; }
+
+  h1, h2, h3, h4 { page-break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+}
+
+/* 暗色模式 */
+html.dark {
+  --ink: #f5f5f5;
+  --ink-2: #d1d5db;
+  --ink-3: #9ca3af;
+  --ink-4: #6b7280;
+  --ink-5: #374151;
+  --ink-6: #1f2937;
+  --bg: #111827;
+  --paper: #1f2937;
+}
+
+html.dark body {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+html.dark ::selection {
+  background: #3b82f6;
+  color: white;
+}
+
+/* 暗色模式下组件样式覆盖（Tailwind dark: 无法完全覆盖自定义颜色类，这里集中处理） */
+html.dark .card-premium {
+  background: #1f2937;
+  border-color: #374151;
+}
+html.dark .card-premium:hover {
+  border-color: #4b5563;
+}
+html.dark .bg-white {
+  background-color: #1f2937 !important;
+}
+html.dark .bg-ink-6 {
+  background-color: #111827 !important;
+}
+html.dark .bg-red-50 {
+  background-color: #450a0a !important;
+  border-color: #7f1d1d !important;
+}
+html.dark .bg-red-50 .text-red-700,
+html.dark .text-red-700 {
+  color: #fca5a5 !important;
+}
+html.dark .border-ink-5 {
+  border-color: #374151;
+}
+html.dark .hover\:bg-ink-6\/40:hover {
+  background-color: rgba(31, 41, 55, 0.4) !important;
+}
+html.dark .hover\:bg-ink-6\/20:hover {
+  background-color: rgba(31, 41, 55, 0.2) !important;
 }

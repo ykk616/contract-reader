@@ -2,6 +2,11 @@
 // 替代 dangerouslySetInnerHTML，更安全（不解析 HTML）。
 import { Fragment } from "react";
 
+/** 生成安全的 HTML id（用于条款导航锚点跳转） */
+export function headingId(label: string): string {
+  return label.toLowerCase().replace(/[^a-z0-9一-鿿]+/g, "-").replace(/-+$/g, "");
+}
+
 const RISK_COLORS: Record<string, string> = {
   高: "bg-red-100 text-red-800 border-red-300",
   中: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -22,6 +27,7 @@ export function renderSummary(text: string) {
         if (headingMatch) {
           const level = headingMatch[1].length;
           const content = headingMatch[2];
+          const id = headingId(content);
           const sizeClass =
             level === 1
               ? "text-xl font-bold mt-4 mb-2"
@@ -29,7 +35,7 @@ export function renderSummary(text: string) {
               ? "text-lg font-semibold mt-3 mb-1.5"
               : "text-base font-semibold mt-2 mb-1";
           return (
-            <div key={i} className={sizeClass}>
+            <div key={i} id={id} className={sizeClass}>
               {parseInline(content)}
             </div>
           );

@@ -1,10 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import "./globals.css";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const [dark, setDark] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    if (stored === "dark") {
+      document.documentElement.classList.add("dark");
+      setDark(true);
+    }
+  }, []);
+
+  function toggleTheme() {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  }
+
   return (
     <html lang="zh-CN">
       <head>
@@ -24,38 +43,49 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-[#fafafa]">
         {/* 顶部品牌栏 */}
-        <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 border-b border-ink-5">
+        <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-[#1f2937]/80 border-b border-ink-5 dark:border-[#374151]">
           <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.dispatchEvent(new CustomEvent("youna:go-home"))}>
               <img src="/icon-192.png" alt="" className="w-9 h-9 rounded-lg shadow-sm" />
               <div className="flex items-baseline gap-2.5">
-                <span className="font-serif text-lg font-bold text-ink tracking-tight">私人法务</span>
+                <span className="font-serif text-lg font-bold text-ink dark:text-[#f5f5f5] tracking-tight">私人法务</span>
                 <span className="text-[10px] uppercase tracking-[0.2em] text-ink-4 font-medium hidden sm:inline">
                   Your Legal Counsel
                 </span>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-5 text-xs text-ink-3">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                服务可用
-              </span>
-              <span className="text-ink-4">|</span>
-              <span>合同不上传不外传</span>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-5 text-xs text-ink-3">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                  服务可用
+                </span>
+                <span className="text-ink-4">|</span>
+                <span>合同不上传不外传</span>
+              </div>
+              <button
+                onClick={toggleTheme}
+                className="text-xs text-ink-3 hover:text-ink dark:hover:text-[#d1d5db] transition-colors px-2"
+                title={dark ? "切换亮色模式" : "切换暗色模式"}
+              >
+                {dark ? "☀️" : "🌙"}
+              </button>
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent("youna:go-home"))}
+                className="text-xs text-ink-3 hover:text-ink dark:hover:text-[#d1d5db] transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-ink-5 dark:border-[#374151] hover:border-ink-3"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                主页
+              </button>
             </div>
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent("youna:go-home"))}
-              className="text-xs text-ink-3 hover:text-ink transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-ink-5 hover:border-ink-3"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-              主页
-            </button>
           </div>
         </header>
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </main>
 
-        <footer className="border-t border-ink-5 bg-white/50 backdrop-blur py-5 mt-12">
+        <footer className="border-t border-ink-5 dark:border-[#374151] bg-white/50 dark:bg-[#1f2937]/50 backdrop-blur py-5 mt-12">
           <div className="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-4">
             <p>本工具仅供快速参考，不替代律师专业意见，关键条款请对照原文核对</p>
             <p className="text-ink-4">© 2026 私人法务 · AI 驱动 · 隐私优先</p>
